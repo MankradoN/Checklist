@@ -5,8 +5,7 @@ import Typography from '@material-ui/core/Typography';
 import ButtonBase from '@material-ui/core/ButtonBase';
 import IconButton from '@material-ui/core/IconButton';
 
-
-interface TaskProps {
+export interface TaskType{
     title: string;
     priority: "high"|"medium"|"low"| "done";
     description: string;
@@ -14,11 +13,17 @@ interface TaskProps {
     image:string;
 }
 
-const Task:React.FC<TaskProps> =({title,priority,duration, description,image})=>{
+ interface TaskProps extends TaskType {
+    doneStateHandler?: (task:TaskType)=>void
+}
+
+
+
+const Task:React.FC<TaskProps> =({title,priority,duration, description,image,doneStateHandler})=>{
     const useStyles = makeStyles((theme) => ({
         root: {
           flexGrow: 1,
-          padding: '10%',
+          padding: '3%',
         },
         paper: {
           padding: theme.spacing(2),
@@ -72,15 +77,12 @@ const Task:React.FC<TaskProps> =({title,priority,duration, description,image})=>
                     </Typography>
                   </Grid>
                   <Grid item>
-                    <Typography variant="body2" style={{ cursor: 'pointer' }}>
+                    {priority!=="done" && <Typography variant="body2" onClick={()=>doneStateHandler!({title,priority,description,image,duration})} style={{ cursor: 'pointer' }}>
                       Move to done
-                    </Typography>
+                    </Typography>}
                   </Grid>
                 </Grid>
                 <Grid item>
-                <IconButton aria-label="delete">
-                     <DeleteIcon />
-                </IconButton>
                   <Typography variant="subtitle1" style={{ color: 'red' }}>x</Typography>
                 </Grid>
               </Grid>
